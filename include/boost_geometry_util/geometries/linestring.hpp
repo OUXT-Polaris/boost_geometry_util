@@ -20,7 +20,7 @@
 #include <geometry_msgs/msg/point.hpp>
 #include <vector>
 
-BOOST_GEOMETRY_REGISTER_LINESTRING(std::vector<boost_geometry_utils::Point2D>)
+BOOST_GEOMETRY_REGISTER_LINESTRING(std::vector<boost_geometry_util::Point2D>)
 BOOST_GEOMETRY_REGISTER_LINESTRING(std::vector<geometry_msgs::msg::Point>)
 
 #endif  // BOOST_GEOMETRY_UTIL__GEOMETRIES__LINESTRING_HPP_

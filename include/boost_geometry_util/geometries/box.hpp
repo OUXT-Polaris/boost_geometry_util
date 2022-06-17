@@ -20,7 +20,7 @@
 #include <boost_geometry_util/geometries/point.hpp>
 #include <geometry_msgs/msg/point.hpp>
 
-namespace boost_geometry_utils
+namespace boost_geometry_util
 {
 class Box2D
 {
@@ -33,8 +33,8 @@ public:
   Point2D min_corner;
   Point2D max_corner;
 };
-}  // namespace boost_geometry_utils
+}  // namespace boost_geometry_util
 
 BOOST_GEOMETRY_REGISTER_BOX(
-  boost_geometry_utils::Box2D, boost_geometry_utils::Point2D, min_corner, max_corner)
+  boost_geometry_util::Box2D, boost_geometry_util::Point2D, min_corner, max_corner)
 #endif  // BOOST_GEOMETRY_UTIL__GEOMETRIES__BOX_HPP_

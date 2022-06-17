@@ -33,7 +33,7 @@ namespace bg = boost::geometry;
 
 TEST(TestSuite, Point2D)
 {
-  const auto point = boost_geometry_utils::Point2D(3, 5);
+  const auto point = boost_geometry_util::Point2D(3, 5);
   EXPECT_POINT2D_EQ(point, 3, 5);
   geometry_msgs::msg::Point ros_point;
   {
@@ -46,10 +46,10 @@ TEST(TestSuite, Point2D)
 
 TEST(TestSuite, Box)
 {
-  const auto b0 = boost_geometry_utils::Box2D(
-    boost_geometry_utils::Point2D(0, 0), boost_geometry_utils::Point2D(3, 3));
-  const auto b1 = boost_geometry_utils::Box2D(
-    boost_geometry_utils::Point2D(4, 4), boost_geometry_utils::Point2D(7, 7));
+  const auto b0 = boost_geometry_util::Box2D(
+    boost_geometry_util::Point2D(0, 0), boost_geometry_util::Point2D(3, 3));
+  const auto b1 = boost_geometry_util::Box2D(
+    boost_geometry_util::Point2D(4, 4), boost_geometry_util::Point2D(7, 7));
   EXPECT_BOX2D_EQ(b0, 0, 0, 3, 3);
   EXPECT_BOX2D_EQ(b1, 4, 4, 7, 7);
   geometry_msgs::msg::Point ros_point0;
@@ -64,7 +64,7 @@ TEST(TestSuite, Box)
     ros_point1.y = 3.0;
     ros_point1.z = 0.3;
   };
-  const auto b2 = boost_geometry_utils::Box2D(ros_point0, ros_point1);
+  const auto b2 = boost_geometry_util::Box2D(ros_point0, ros_point1);
   EXPECT_BOX2D_EQ(b2, 0, 0, 3, 3);
 }
 
@@ -116,7 +116,7 @@ TEST(TestSuite, LineString)
 
 TEST(TestSuite, Polygon)
 {
-  bg::model::polygon<boost_geometry_utils::Point2D> poly;
+  bg::model::polygon<boost_geometry_util::Point2D> poly;
   bg::exterior_ring(poly).emplace_back(0, 0);
   bg::exterior_ring(poly).emplace_back(0, 3);
   bg::exterior_ring(poly).emplace_back(3, 3);
@@ -126,17 +126,17 @@ TEST(TestSuite, Polygon)
 
 TEST(TestSuite, Disjoint)
 {
-  const auto b0 = boost_geometry_utils::Box2D(
-    boost_geometry_utils::Point2D(0, 0), boost_geometry_utils::Point2D(3, 3));
-  const auto b1 = boost_geometry_utils::Box2D(
-    boost_geometry_utils::Point2D(4, 4), boost_geometry_utils::Point2D(7, 7));
+  const auto b0 = boost_geometry_util::Box2D(
+    boost_geometry_util::Point2D(0, 0), boost_geometry_util::Point2D(3, 3));
+  const auto b1 = boost_geometry_util::Box2D(
+    boost_geometry_util::Point2D(4, 4), boost_geometry_util::Point2D(7, 7));
   EXPECT_TRUE(bg::disjoint(b0, b1));
-  const auto b2 = boost_geometry_utils::Box2D(
-    boost_geometry_utils::Point2D(2, 2), boost_geometry_utils::Point2D(5, 5));
+  const auto b2 = boost_geometry_util::Box2D(
+    boost_geometry_util::Point2D(2, 2), boost_geometry_util::Point2D(5, 5));
   EXPECT_FALSE(bg::disjoint(b0, b2));
-  const auto p0 = boost_geometry_utils::Point2D(4, 4);
+  const auto p0 = boost_geometry_util::Point2D(4, 4);
   EXPECT_TRUE(bg::disjoint(b0, p0));
-  const auto p1 = boost_geometry_utils::Point2D(2, 2);
+  const auto p1 = boost_geometry_util::Point2D(2, 2);
   EXPECT_FALSE(bg::disjoint(b0, p1));
   geometry_msgs::msg::Point ros_point;
   {
@@ -149,21 +149,21 @@ TEST(TestSuite, Disjoint)
 
 TEST(TestSuite, Area)
 {
-  const auto b0 = boost_geometry_utils::Box2D(
-    boost_geometry_utils::Point2D(0, 0), boost_geometry_utils::Point2D(3, 3));
+  const auto b0 = boost_geometry_util::Box2D(
+    boost_geometry_util::Point2D(0, 0), boost_geometry_util::Point2D(3, 3));
   EXPECT_DOUBLE_EQ(bg::area(b0), 9);
 }
 
 TEST(TestSuite, ConvexHull)
 {
-  bg::model::polygon<boost_geometry_utils::Point2D> poly;
+  bg::model::polygon<boost_geometry_util::Point2D> poly;
   bg::exterior_ring(poly) = {
-    boost_geometry_utils::Point2D(2.0, 1.3), boost_geometry_utils::Point2D(2.4, 1.7),
-    boost_geometry_utils::Point2D(3.6, 1.2), boost_geometry_utils::Point2D(4.6, 1.6),
-    boost_geometry_utils::Point2D(4.1, 3.0), boost_geometry_utils::Point2D(5.3, 2.8),
-    boost_geometry_utils::Point2D(5.4, 1.2), boost_geometry_utils::Point2D(4.9, 0.8),
-    boost_geometry_utils::Point2D(3.6, 0.7), boost_geometry_utils::Point2D(2.0, 1.3)};
-  bg::model::polygon<boost_geometry_utils::Point2D> hull;
+    boost_geometry_util::Point2D(2.0, 1.3), boost_geometry_util::Point2D(2.4, 1.7),
+    boost_geometry_util::Point2D(3.6, 1.2), boost_geometry_util::Point2D(4.6, 1.6),
+    boost_geometry_util::Point2D(4.1, 3.0), boost_geometry_util::Point2D(5.3, 2.8),
+    boost_geometry_util::Point2D(5.4, 1.2), boost_geometry_util::Point2D(4.9, 0.8),
+    boost_geometry_util::Point2D(3.6, 0.7), boost_geometry_util::Point2D(2.0, 1.3)};
+  bg::model::polygon<boost_geometry_util::Point2D> hull;
   bg::convex_hull(poly, hull);
 }
 
