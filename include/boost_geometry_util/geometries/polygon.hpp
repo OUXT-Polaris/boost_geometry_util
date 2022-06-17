@@ -21,10 +21,8 @@
 
 namespace boost_geometry_util
 {
-/*
 boost::geometry::model::polygon<boost_geometry_util::Point2D> toPolygon(
   const std::vector<geometry_msgs::msg::Point> & linestring);
-*/
 boost::geometry::model::polygon<boost_geometry_util::Point2D> toPolygon(
   const std::vector<boost_geometry_util::Point2D> & linestring);
 }  // namespace boost_geometry_util
