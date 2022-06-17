@@ -67,6 +67,13 @@ TEST(TestSuite, Disjoint)
   EXPECT_TRUE(bg::disjoint(b0, p0));
   const auto p1 = boost_geometry_utils::Point2D(2, 2);
   EXPECT_FALSE(bg::disjoint(b0, p1));
+  geometry_msgs::msg::Point ros_point;
+  {
+    ros_point.x = 2.0;
+    ros_point.y = 2.0;
+    ros_point.z = 0.3;
+  };
+  EXPECT_FALSE(bg::disjoint(b0, ros_point));
 }
 
 int main(int argc, char ** argv)
