@@ -116,12 +116,18 @@ TEST(TestSuite, LineString)
 
 TEST(TestSuite, Polygon)
 {
-  bg::model::polygon<boost_geometry_util::Point2D> poly;
-  bg::exterior_ring(poly).emplace_back(0, 0);
-  bg::exterior_ring(poly).emplace_back(0, 3);
-  bg::exterior_ring(poly).emplace_back(3, 3);
-  bg::exterior_ring(poly).emplace_back(3, 0);
-  bg::exterior_ring(poly).emplace_back(0, 0);
+  boost_geometry_util::toPolygon(std::vector<boost_geometry_util::Point2D>(
+    {boost_geometry_util::Point2D(2.0, 1.3), boost_geometry_util::Point2D(2.4, 1.7),
+     boost_geometry_util::Point2D(3.6, 1.2), boost_geometry_util::Point2D(4.6, 1.6),
+     boost_geometry_util::Point2D(4.1, 3.0), boost_geometry_util::Point2D(5.3, 2.8),
+     boost_geometry_util::Point2D(5.4, 1.2), boost_geometry_util::Point2D(4.9, 0.8),
+     boost_geometry_util::Point2D(3.6, 0.7), boost_geometry_util::Point2D(2.0, 1.3)}));
+  geometry_msgs::msg::Point p0, p1;
+  p0.x = 1;
+  p0.y = 0;
+  p1.x = 1;
+  p1.y = 4;
+  boost_geometry_util::toPolygon(std::vector<geometry_msgs::msg::Point>({p0, p1}));
 }
 
 TEST(TestSuite, Disjoint)
@@ -156,15 +162,17 @@ TEST(TestSuite, Area)
 
 TEST(TestSuite, ConvexHull)
 {
-  bg::model::polygon<boost_geometry_util::Point2D> poly;
-  bg::exterior_ring(poly) = {
+  std::vector<boost_geometry_util::Point2D> linestring = {
     boost_geometry_util::Point2D(2.0, 1.3), boost_geometry_util::Point2D(2.4, 1.7),
     boost_geometry_util::Point2D(3.6, 1.2), boost_geometry_util::Point2D(4.6, 1.6),
     boost_geometry_util::Point2D(4.1, 3.0), boost_geometry_util::Point2D(5.3, 2.8),
     boost_geometry_util::Point2D(5.4, 1.2), boost_geometry_util::Point2D(4.9, 0.8),
     boost_geometry_util::Point2D(3.6, 0.7), boost_geometry_util::Point2D(2.0, 1.3)};
+  /*
+  bg::model::polygon<boost_geometry_util::Point2D> poly = boost_geometry_util::toPolygon();
   bg::model::polygon<boost_geometry_util::Point2D> hull;
   bg::convex_hull(poly, hull);
+  */
 }
 
 int main(int argc, char ** argv)

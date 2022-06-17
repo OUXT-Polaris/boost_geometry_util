@@ -21,10 +21,17 @@
 
 namespace boost_geometry_util
 {
+template <typename T>
 boost::geometry::model::polygon<boost_geometry_util::Point2D> toPolygon(
-  const std::vector<geometry_msgs::msg::Point> & linestring);
-boost::geometry::model::polygon<boost_geometry_util::Point2D> toPolygon(
-  const std::vector<boost_geometry_util::Point2D> & linestring);
+  const std::vector<T> & linestring)
+{
+  boost::geometry::model::polygon<boost_geometry_util::Point2D> poly;
+  std::for_each(linestring.begin(), linestring.end(), [&poly](const auto & point) {
+    boost::geometry::exterior_ring(poly).emplace_back(
+      boost_geometry_util::Point2D(point.x, point.y));
+  });
+  return poly;
+}
 }  // namespace boost_geometry_util
 
 #endif  // BOOST_GEOMETRY_UTIL__GEOMETRIES__POINT_HPP_
