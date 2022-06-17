@@ -18,6 +18,7 @@
 #include <boost/geometry/geometries/box.hpp>
 #include <boost/geometry/geometries/register/box.hpp>
 #include <boost_geometry_util/geometries/point.hpp>
+#include <geometry_msgs/msg/point.hpp>
 
 namespace boost_geometry_utils
 {
@@ -25,6 +26,10 @@ class Box2D
 {
 public:
   explicit Box2D(const Point2D & min_corner, const Point2D & max_corner);
+  explicit Box2D(const geometry_msgs::msg::Point & min_corner, const Point2D & max_corner);
+  explicit Box2D(const Point2D & min_corner, const geometry_msgs::msg::Point & max_corner);
+  explicit Box2D(
+    const geometry_msgs::msg::Point & min_corner, const geometry_msgs::msg::Point & max_corner);
   Point2D min_corner;
   Point2D max_corner;
 };

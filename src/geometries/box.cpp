@@ -20,4 +20,20 @@ Box2D::Box2D(const Point2D & min_corner, const Point2D & max_corner)
 : min_corner(min_corner), max_corner(max_corner)
 {
 }
+
+Box2D::Box2D(const geometry_msgs::msg::Point & min_corner, const Point2D & max_corner)
+: min_corner(min_corner), max_corner(max_corner)
+{
+}
+
+Box2D::Box2D(const Point2D & min_corner, const geometry_msgs::msg::Point & max_corner)
+: min_corner(min_corner), max_corner(max_corner)
+{
+}
+
+Box2D::Box2D(
+  const geometry_msgs::msg::Point & min_corner, const geometry_msgs::msg::Point & max_corner)
+: min_corner(min_corner), max_corner(max_corner)
+{
+}
 }  // namespace boost_geometry_utils
