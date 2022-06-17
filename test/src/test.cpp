@@ -15,6 +15,7 @@
 // headers in Google Test
 #include <gtest/gtest.h>
 
+#include <boost/assign/list_of.hpp>
 #include <boost/geometry.hpp>
 #include <boost/geometry/algorithms/disjoint.hpp>
 #include <boost/geometry/geometries/box.hpp>
@@ -152,6 +153,15 @@ TEST(TestSuite, Area)
   const auto b0 = boost_geometry_utils::Box2D(
     boost_geometry_utils::Point2D(0, 0), boost_geometry_utils::Point2D(3, 3));
   EXPECT_DOUBLE_EQ(bg::area(b0), 9);
+}
+
+TEST(TestSuite, ConvexHull)
+{
+  bg::model::polygon<boost_geometry_utils::Point2D> poly;
+  bg::exterior_ring(poly) = boost::assign::list_of<boost_geometry_utils::Point2D>(2.0, 1.3)(
+    2.4, 1.7)(3.6, 1.2)(4.6, 1.6)(4.1, 3.0)(5.3, 2.8)(5.4, 1.2)(4.9, 0.8)(3.6, 0.7)(2.0, 1.3);
+  bg::model::polygon<boost_geometry_utils::Point2D> hull;
+  bg::convex_hull(poly, hull);
 }
 
 int main(int argc, char ** argv)

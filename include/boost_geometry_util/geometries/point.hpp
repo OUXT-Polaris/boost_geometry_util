@@ -26,6 +26,7 @@ class Point2D
 public:
   explicit Point2D(const geometry_msgs::msg::Point & point);
   explicit Point2D(double x, double y);
+  Point2D() = default;
   double x;
   double y;
 };
