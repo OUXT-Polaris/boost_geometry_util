@@ -12,12 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef BOOST_GEOMETRY_UTIL__GEOMETRIES__GEOMETRIES_HPP_
-#define BOOST_GEOMETRY_UTIL__GEOMETRIES__GEOMETRIES_HPP_
+#ifndef BOOST_GEOMETRY_UTIL__GEOMETRIES__POLYGON_HPP_
+#define BOOST_GEOMETRY_UTIL__GEOMETRIES__POLYGON_HPP_
 
-#include <boost_geometry_util/geometries/box.hpp>
+#include <boost/geometry/geometries/polygon.hpp>
 #include <boost_geometry_util/geometries/linestring.hpp>
 #include <boost_geometry_util/geometries/point.hpp>
-#include <boost_geometry_util/geometries/polygon.hpp>
 
-#endif  // BOOST_GEOMETRY_UTIL__GEOMETRIES__GEOMETRIES_HPP_
+namespace boost_geometry_util
+{
+/*
+boost::geometry::model::polygon<boost_geometry_util::Point2D> toPolygon(
+  const std::vector<geometry_msgs::msg::Point> & linestring);
+*/
+boost::geometry::model::polygon<boost_geometry_util::Point2D> toPolygon(
+  const std::vector<boost_geometry_util::Point2D> & linestring);
+}  // namespace boost_geometry_util
+
+#endif  // BOOST_GEOMETRY_UTIL__GEOMETRIES__POINT_HPP_
