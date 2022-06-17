@@ -51,6 +51,20 @@ TEST(TestSuite, Box)
     boost_geometry_utils::Point2D(4, 4), boost_geometry_utils::Point2D(7, 7));
   EXPECT_BOX2D_EQ(b0, 0, 0, 3, 3);
   EXPECT_BOX2D_EQ(b1, 4, 4, 7, 7);
+  geometry_msgs::msg::Point ros_point0;
+  {
+    ros_point0.x = 0.0;
+    ros_point0.y = 0.0;
+    ros_point0.z = 0.3;
+  };
+  geometry_msgs::msg::Point ros_point1;
+  {
+    ros_point1.x = 3.0;
+    ros_point1.y = 3.0;
+    ros_point1.z = 0.3;
+  };
+  const auto b2 = boost_geometry_utils::Box2D(ros_point0, ros_point1);
+  EXPECT_BOX2D_EQ(b2, 0, 0, 3, 3);
 }
 
 TEST(TestSuite, Disjoint)
