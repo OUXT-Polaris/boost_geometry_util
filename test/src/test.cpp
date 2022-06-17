@@ -15,6 +15,7 @@
 // headers in Google Test
 #include <gtest/gtest.h>
 
+#include <boost/geometry.hpp>
 #include <boost/geometry/algorithms/disjoint.hpp>
 #include <boost/geometry/geometries/box.hpp>
 #include <boost/geometry/geometries/point_xy.hpp>
@@ -67,6 +68,62 @@ TEST(TestSuite, Box)
   EXPECT_BOX2D_EQ(b2, 0, 0, 3, 3);
 }
 
+TEST(TestSuite, LineString)
+{
+  std::vector<geometry_msgs::msg::Point> line0;
+  {
+    geometry_msgs::msg::Point p0, p1;
+    p0.x = 0;
+    p0.y = 2;
+    p1.x = 2;
+    p1.y = 2;
+    line0.emplace_back(p0);
+    line0.emplace_back(p1);
+  }
+  std::vector<geometry_msgs::msg::Point> line1;
+  {
+    geometry_msgs::msg::Point p0, p1;
+    p0.x = 1;
+    p0.y = 0;
+    p1.x = 1;
+    p1.y = 4;
+    line1.emplace_back(p0);
+    line1.emplace_back(p1);
+  }
+  EXPECT_TRUE(bg::intersects(line0, line1));
+  std::vector<geometry_msgs::msg::Point> line2;
+  {
+    geometry_msgs::msg::Point p0, p1;
+    p0.x = 0;
+    p0.y = 0;
+    p1.x = 2;
+    p1.y = 0;
+    line0.emplace_back(p0);
+    line0.emplace_back(p1);
+  }
+  std::vector<geometry_msgs::msg::Point> line3;
+  {
+    geometry_msgs::msg::Point p0, p1;
+    p0.x = 0;
+    p0.y = 2;
+    p1.x = 2;
+    p1.y = 2;
+    line1.emplace_back(p0);
+    line1.emplace_back(p1);
+  }
+  EXPECT_FALSE(bg::intersects(line2, line3));
+}
+
+TEST(TestSuite, Polygon)
+{
+  bg::model::polygon<boost_geometry_utils::Point2D> poly;
+  bg::exterior_ring(poly).emplace_back(0, 0);
+  bg::exterior_ring(poly).emplace_back(0, 3);
+  bg::exterior_ring(poly).emplace_back(3, 3);
+  bg::exterior_ring(poly).emplace_back(3, 0);
+  bg::exterior_ring(poly).emplace_back(0, 0);
+}
+
 TEST(TestSuite, Disjoint)
 {
   const auto b0 = boost_geometry_utils::Box2D(
@@ -88,6 +145,13 @@ TEST(TestSuite, Disjoint)
     ros_point.z = 0.3;
   };
   EXPECT_FALSE(bg::disjoint(b0, ros_point));
+}
+
+TEST(TestSuite, Area)
+{
+  const auto b0 = boost_geometry_utils::Box2D(
+    boost_geometry_utils::Point2D(0, 0), boost_geometry_utils::Point2D(3, 3));
+  EXPECT_DOUBLE_EQ(bg::area(b0), 9);
 }
 
 int main(int argc, char ** argv)
