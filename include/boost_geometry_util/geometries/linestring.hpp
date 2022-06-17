@@ -12,4 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <boost/geometry/geometries/polygon.hpp>
+#ifndef BOOST_GEOMETRY_UTIL__GEOMETRIES__LINESTRING_HPP_
+#define BOOST_GEOMETRY_UTIL__GEOMETRIES__LINESTRING_HPP_
+
+#include <boost/geometry/geometries/register/linestring.hpp>
+#include <boost_geometry_util/geometries/point.hpp>
+#include <geometry_msgs/msg/point.hpp>
+#include <vector>
+
+BOOST_GEOMETRY_REGISTER_LINESTRING(std::vector<boost_geometry_utils::Point2D>)
+BOOST_GEOMETRY_REGISTER_LINESTRING(std::vector<geometry_msgs::msg::Point>)
+
+#endif  // BOOST_GEOMETRY_UTIL__GEOMETRIES__LINESTRING_HPP_

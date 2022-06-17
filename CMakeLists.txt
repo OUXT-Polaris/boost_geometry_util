@@ -13,8 +13,8 @@ ament_auto_find_build_dependencies()
 
 ament_auto_add_library(boost_geometry_util SHARED
   src/geometries/box.cpp
+  src/geometries/linestring.cpp
   src/geometries/point.cpp
-  src/geometries/polygon.cpp
 )
 
 install(
