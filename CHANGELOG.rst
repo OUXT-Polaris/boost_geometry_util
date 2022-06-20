@@ -2,8 +2,8 @@
 Changelog for package boost_geometry_util
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.0.1 (2022-06-20)
+------------------
 * Merge pull request `#1 <https://github.com/OUXT-Polaris/boost_geometry_util/issues/1>`_ from OUXT-Polaris/workflow/sync
   [Bot] Update workflow
 * Setup workflow
