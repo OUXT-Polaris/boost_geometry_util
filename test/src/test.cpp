@@ -41,13 +41,7 @@ namespace bg = boost::geometry;
 template <typename T>
 void testPoint2D(double x, double y, double z)
 {
-  T ros_point;
-  {
-    ros_point.x = x;
-    ros_point.y = y;
-    ros_point.z = z;
-  }
-  EXPECT_POINT2D_EQ(ros_point, x, y);
+  EXPECT_POINT2D_EQ(boost_geometry_util::point_3d::construct<T>(x, y, z), x, y);
 }
 
 TEST(TestSuite, Point2D) { TEST_POINT_TYPE_FOREACH(testPoint2D, 1.0, 2.0, 3.0); }
@@ -55,13 +49,7 @@ TEST(TestSuite, Point2D) { TEST_POINT_TYPE_FOREACH(testPoint2D, 1.0, 2.0, 3.0); 
 template <typename T>
 void testPoint3D(double x, double y, double z)
 {
-  T ros_point;
-  {
-    ros_point.x = x;
-    ros_point.y = y;
-    ros_point.z = z;
-  }
-  EXPECT_POINT2D_EQ(ros_point, x, y);
+  EXPECT_POINT3D_EQ(boost_geometry_util::point_3d::construct<T>(x, y, z), x, y, z);
 }
 
 TEST(TestSuite, Point3D) { TEST_POINT_TYPE_FOREACH(testPoint2D, 1.0, 2.0, 3.0); }
@@ -69,19 +57,9 @@ TEST(TestSuite, Point3D) { TEST_POINT_TYPE_FOREACH(testPoint2D, 1.0, 2.0, 3.0); 
 template <typename T>
 void testBox(double x_min, double y_min, double z_min, double x_max, double y_max, double z_max)
 {
-  T ros_point_min;
-  {
-    ros_point_min.x = x_min;
-    ros_point_min.y = y_min;
-    ros_point_min.z = z_min;
-  }
-  T ros_point_max;
-  {
-    ros_point_max.x = x_max;
-    ros_point_max.y = y_max;
-    ros_point_max.z = z_max;
-  }
-  EXPECT_NO_THROW(bg::model::box<T> box(ros_point_min, ros_point_max));
+  EXPECT_NO_THROW(bg::model::box<T> box(
+    boost_geometry_util::point_3d::construct<T>(x_min, y_min, z_min),
+    boost_geometry_util::point_3d::construct<T>(x_max, y_max, z_max)));
 }
 
 TEST(TestSuite, Box) { TEST_POINT_TYPE_FOREACH(testBox, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0); }

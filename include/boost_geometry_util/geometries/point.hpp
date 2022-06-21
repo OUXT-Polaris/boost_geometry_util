@@ -22,6 +22,8 @@
 
 namespace boost_geometry_util
 {
+namespace point_3d
+{
 template <typename T>
 T construct(double x, double y, double z)
 {
@@ -31,6 +33,7 @@ T construct(double x, double y, double z)
   point.z = z;
   return point;
 }
+}  // namespace point_3d
 }  // namespace boost_geometry_util
 
 BOOST_GEOMETRY_REGISTER_POINT_3D(geometry_msgs::msg::Point, double, cs::cartesian, x, y, z);
