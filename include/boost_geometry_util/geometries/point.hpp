@@ -18,6 +18,7 @@
 #include <boost/geometry/geometries/point_xy.hpp>
 #include <boost/geometry/geometries/register/point.hpp>
 #include <geometry_msgs/msg/point.hpp>
+#include <geometry_msgs/msg/point32.hpp>
 
 namespace boost_geometry_util
 {
@@ -32,7 +33,8 @@ public:
 };
 }  // namespace boost_geometry_util
 
-BOOST_GEOMETRY_REGISTER_POINT_2D(geometry_msgs::msg::Point, double, cs::cartesian, x, y)
 BOOST_GEOMETRY_REGISTER_POINT_2D(boost_geometry_util::Point2D, double, cs::cartesian, x, y)
+BOOST_GEOMETRY_REGISTER_POINT_2D(geometry_msgs::msg::Point, double, cs::cartesian, x, y)
+BOOST_GEOMETRY_REGISTER_POINT_2D(geometry_msgs::msg::Point32, double, cs::cartesian, x, y)
 
 #endif  // BOOST_GEOMETRY_UTIL__GEOMETRIES__POINT_HPP_
