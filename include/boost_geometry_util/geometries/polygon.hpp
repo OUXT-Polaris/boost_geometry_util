@@ -18,6 +18,8 @@
 #include <boost/geometry/geometries/polygon.hpp>
 #include <boost_geometry_util/geometries/linestring.hpp>
 #include <boost_geometry_util/geometries/point.hpp>
+#include <geometry_msgs/msg/point32.hpp>
+#include <geometry_msgs/msg/polygon.hpp>
 
 namespace boost_geometry_util
 {
@@ -32,6 +34,9 @@ boost::geometry::model::polygon<boost_geometry_util::Point2D> toPolygon(
   });
   return poly;
 }
+
+boost::geometry::model::polygon<boost_geometry_util::Point2D> toPolygon(
+  const geometry_msgs::msg::Polygon & polygon);
 }  // namespace boost_geometry_util
 
 #endif  // BOOST_GEOMETRY_UTIL__GEOMETRIES__POINT_HPP_

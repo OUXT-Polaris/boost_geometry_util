@@ -16,4 +16,9 @@
 
 namespace boost_geometry_util
 {
+boost::geometry::model::polygon<boost_geometry_util::Point2D> toPolygon(
+  const geometry_msgs::msg::Polygon & polygon)
+{
+  return toPolygon(polygon.points);
+}
 }  // namespace boost_geometry_util

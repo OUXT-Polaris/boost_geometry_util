@@ -22,5 +22,6 @@
 
 BOOST_GEOMETRY_REGISTER_LINESTRING(std::vector<boost_geometry_util::Point2D>)
 BOOST_GEOMETRY_REGISTER_LINESTRING(std::vector<geometry_msgs::msg::Point>)
+BOOST_GEOMETRY_REGISTER_LINESTRING(std::vector<geometry_msgs::msg::Point32>)
 
 #endif  // BOOST_GEOMETRY_UTIL__GEOMETRIES__LINESTRING_HPP_
