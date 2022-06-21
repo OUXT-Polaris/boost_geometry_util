@@ -16,7 +16,9 @@
 
 namespace boost_geometry_util
 {
+/*
 Point2D::Point2D(const geometry_msgs::msg::Point & point) : x(point.x), y(point.y) {}
 
 Point2D::Point2D(double x, double y) : x(x), y(y) {}
+*/
 }  // namespace boost_geometry_util

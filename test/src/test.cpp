@@ -27,23 +27,62 @@ namespace bg = boost::geometry;
   EXPECT_DOUBLE_EQ(boost::geometry::get<0>(POINT), X); \
   EXPECT_DOUBLE_EQ(boost::geometry::get<1>(POINT), Y);
 
+#define EXPECT_POINT3D_EQ(POINT, X, Y, Z)              \
+  EXPECT_DOUBLE_EQ(boost::geometry::get<0>(POINT), X); \
+  EXPECT_DOUBLE_EQ(boost::geometry::get<1>(POINT), Y); \
+  EXPECT_DOUBLE_EQ(boost::geometry::get<1>(POINT), Z);
+
 #define EXPECT_BOX2D_EQ(BOX, MIN_CORNER_X, MIN_CORNER_Y, MAX_CORNER_X, MAX_CORNER_Y) \
   EXPECT_POINT2D_EQ(BOX.min_corner, MIN_CORNER_X, MIN_CORNER_Y);                     \
   EXPECT_POINT2D_EQ(BOX.max_corner, MAX_CORNER_X, MAX_CORNER_Y);
 
-TEST(TestSuite, Point2D)
+#define TEST_POINT_TYPE_FOREACH(IDENTIFIER, ...)      \
+  IDENTIFIER<geometry_msgs::msg::Point>(__VA_ARGS__); \
+  IDENTIFIER<geometry_msgs::msg::Point32>(__VA_ARGS__);
+
+template <typename T>
+void testPoint2D(double x, double y, double z)
 {
-  const auto point = boost_geometry_util::Point2D(3, 5);
-  EXPECT_POINT2D_EQ(point, 3, 5);
+  T ros_point;
+  {
+    ros_point.x = x;
+    ros_point.y = y;
+    ros_point.z = z;
+  }
+  EXPECT_POINT2D_EQ(ros_point, x, y);
+}
+
+TEST(TestSuite, Point2D) { TEST_POINT_TYPE_FOREACH(testPoint2D, 1.0, 2.0, 3.0); }
+
+TEST(TestSuite, Point3D)
+{
   geometry_msgs::msg::Point ros_point;
   {
     ros_point.x = 1.0;
     ros_point.y = 2.0;
     ros_point.z = 0.3;
   };
-  EXPECT_POINT2D_EQ(ros_point, 1, 2);
+  EXPECT_POINT3D_EQ(ros_point, 1, 2, 0.3);
 }
 
+TEST(TestSuite, Box)
+{
+  geometry_msgs::msg::Point ros_point0;
+  {
+    ros_point0.x = 0.0;
+    ros_point0.y = 0.0;
+    ros_point0.z = 0.3;
+  };
+  geometry_msgs::msg::Point ros_point1;
+  {
+    ros_point1.x = 3.0;
+    ros_point1.y = 3.0;
+    ros_point1.z = 0.3;
+  };
+  bg::model::box<geometry_msgs::msg::Point> box(ros_point0, ros_point1);
+}
+
+/*
 TEST(TestSuite, Box)
 {
   const auto b0 = boost_geometry_util::Box2D(
@@ -172,8 +211,8 @@ TEST(TestSuite, ConvexHull)
   bg::model::polygon<boost_geometry_util::Point2D> poly = boost_geometry_util::toPolygon();
   bg::model::polygon<boost_geometry_util::Point2D> hull;
   bg::convex_hull(poly, hull);
-  */
 }
+*/
 
 int main(int argc, char ** argv)
 {

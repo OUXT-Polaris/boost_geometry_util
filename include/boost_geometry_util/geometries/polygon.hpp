@@ -23,6 +23,7 @@
 
 namespace boost_geometry_util
 {
+/*
 template <typename T>
 boost::geometry::model::polygon<boost_geometry_util::Point2D> toPolygon(
   const std::vector<T> & linestring)
@@ -37,6 +38,7 @@ boost::geometry::model::polygon<boost_geometry_util::Point2D> toPolygon(
 
 boost::geometry::model::polygon<boost_geometry_util::Point2D> toPolygon(
   const geometry_msgs::msg::Polygon & polygon);
+*/
 }  // namespace boost_geometry_util
 
 #endif  // BOOST_GEOMETRY_UTIL__GEOMETRIES__POINT_HPP_
