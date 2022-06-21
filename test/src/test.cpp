@@ -86,6 +86,17 @@ void testBox(double x_min, double y_min, double z_min, double x_max, double y_ma
 
 TEST(TestSuite, Box) { TEST_POINT_TYPE_FOREACH(testBox, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0); }
 
+TEST(TestSuite, Polygon)
+{
+  /*
+  boost_geometry_util::toPolygon(std::vector<boost_geometry_util::Point2D>(
+    {boost_geometry_util::Point2D(2.0, 1.3), boost_geometry_util::Point2D(2.4, 1.7),
+     boost_geometry_util::Point2D(3.6, 1.2), boost_geometry_util::Point2D(4.6, 1.6),
+     boost_geometry_util::Point2D(4.1, 3.0), boost_geometry_util::Point2D(5.3, 2.8),
+     boost_geometry_util::Point2D(5.4, 1.2), boost_geometry_util::Point2D(4.9, 0.8),
+     boost_geometry_util::Point2D(3.6, 0.7), boost_geometry_util::Point2D(2.0, 1.3)}));
+  */
+}
 /*
 TEST(TestSuite, Box)
 {

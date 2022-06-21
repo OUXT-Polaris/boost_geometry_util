@@ -20,7 +20,20 @@
 #include <geometry_msgs/msg/point.hpp>
 #include <geometry_msgs/msg/point32.hpp>
 
-BOOST_GEOMETRY_REGISTER_POINT_3D(geometry_msgs::msg::Point, double, cs::cartesian, x, y, z)
-BOOST_GEOMETRY_REGISTER_POINT_3D(geometry_msgs::msg::Point32, double, cs::cartesian, x, y, z)
+namespace boost_geometry_util
+{
+template <typename T>
+T construct(double x, double y, double z)
+{
+  T point;
+  point.x = x;
+  point.y = y;
+  point.z = z;
+  return point;
+}
+}  // namespace boost_geometry_util
+
+BOOST_GEOMETRY_REGISTER_POINT_3D(geometry_msgs::msg::Point, double, cs::cartesian, x, y, z);
+BOOST_GEOMETRY_REGISTER_POINT_3D(geometry_msgs::msg::Point32, double, cs::cartesian, x, y, z);
 
 #endif  // BOOST_GEOMETRY_UTIL__GEOMETRIES__POINT_HPP_
