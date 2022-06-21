@@ -20,24 +20,6 @@
 #include <geometry_msgs/msg/point.hpp>
 #include <geometry_msgs/msg/point32.hpp>
 
-/*
-namespace boost_geometry_util
-{
-class Point2D
-{
-public:
-  explicit Point2D(const geometry_msgs::msg::Point & point);
-  explicit Point2D(double x, double y);
-  Point2D() = default;
-  double x;
-  double y;
-};
-}  // namespace boost_geometry_util
-*/
-
-// BOOST_GEOMETRY_REGISTER_POINT_2D(boost_geometry_util::Point2D, double, cs::cartesian, x, y)
-// BOOST_GEOMETRY_REGISTER_POINT_2D(geometry_msgs::msg::Point, double, cs::cartesian, x, y)
-// BOOST_GEOMETRY_REGISTER_POINT_2D(geometry_msgs::msg::Point32, double, cs::cartesian, x, y)
 BOOST_GEOMETRY_REGISTER_POINT_3D(geometry_msgs::msg::Point, double, cs::cartesian, x, y, z)
 BOOST_GEOMETRY_REGISTER_POINT_3D(geometry_msgs::msg::Point32, double, cs::cartesian, x, y, z)
 

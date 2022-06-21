@@ -17,8 +17,6 @@
 
 #include <boost/geometry.hpp>
 #include <boost/geometry/algorithms/disjoint.hpp>
-#include <boost/geometry/geometries/box.hpp>
-#include <boost/geometry/geometries/point_xy.hpp>
 #include <boost_geometry_util/geometries/geometries.hpp>
 
 namespace bg = boost::geometry;
@@ -54,33 +52,39 @@ void testPoint2D(double x, double y, double z)
 
 TEST(TestSuite, Point2D) { TEST_POINT_TYPE_FOREACH(testPoint2D, 1.0, 2.0, 3.0); }
 
-TEST(TestSuite, Point3D)
+template <typename T>
+void testPoint3D(double x, double y, double z)
 {
-  geometry_msgs::msg::Point ros_point;
+  T ros_point;
   {
-    ros_point.x = 1.0;
-    ros_point.y = 2.0;
-    ros_point.z = 0.3;
-  };
-  EXPECT_POINT3D_EQ(ros_point, 1, 2, 0.3);
+    ros_point.x = x;
+    ros_point.y = y;
+    ros_point.z = z;
+  }
+  EXPECT_POINT2D_EQ(ros_point, x, y);
 }
 
-TEST(TestSuite, Box)
+TEST(TestSuite, Point3D) { TEST_POINT_TYPE_FOREACH(testPoint2D, 1.0, 2.0, 3.0); }
+
+template <typename T>
+void testBox(double x_min, double y_min, double z_min, double x_max, double y_max, double z_max)
 {
-  geometry_msgs::msg::Point ros_point0;
+  T ros_point_min;
   {
-    ros_point0.x = 0.0;
-    ros_point0.y = 0.0;
-    ros_point0.z = 0.3;
-  };
-  geometry_msgs::msg::Point ros_point1;
+    ros_point_min.x = x_min;
+    ros_point_min.y = y_min;
+    ros_point_min.z = z_min;
+  }
+  T ros_point_max;
   {
-    ros_point1.x = 3.0;
-    ros_point1.y = 3.0;
-    ros_point1.z = 0.3;
-  };
-  bg::model::box<geometry_msgs::msg::Point> box(ros_point0, ros_point1);
+    ros_point_max.x = x_max;
+    ros_point_max.y = y_max;
+    ros_point_max.z = z_max;
+  }
+  EXPECT_NO_THROW(bg::model::box<T> box(ros_point_min, ros_point_max));
 }
+
+TEST(TestSuite, Box) { TEST_POINT_TYPE_FOREACH(testBox, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0); }
 
 /*
 TEST(TestSuite, Box)
