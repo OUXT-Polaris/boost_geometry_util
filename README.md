@@ -7,13 +7,9 @@ boost geometry friendly library for ROS2.
 You can use boost geometry with ROS2 very easily.
 
 ```cpp
-const auto b0 = boost_geometry_util::Box2D(
-  boost_geometry_util::Point2D(0, 0), boost_geometry_util::Point2D(3, 3));
-geometry_msgs::msg::Point ros_point;
-{
-ros_point.x = 2.0;
-ros_point.y = 2.0;
-ros_point.z = 0.3;
-};
-boost::geometry::disjoint(b0, ros_point);
+bg::model::box<geometry_msgs::msg::Point> box(
+    boost_geometry_util::point_3d::construct<geometry_msgs::msg::Point>(x_min, y_min, z_min),
+    boost_geometry_util::point_3d::construct<geometry_msgs::msg::Point>(x_max, y_max, z_max));
+const auto ros_point = boost_geometry_util::point_3d::construct<geometry_msgs::msg::Point>(x_max, y_max, z_max);
+boost::geometry::disjoint(box, ros_point);
 ```

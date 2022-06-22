@@ -53,10 +53,20 @@ void testPoint2DApply(double x, double y, double vec_x, double vec_y)
     x + vec_x, y + vec_y);
 }
 
+template <typename T>
+void testPoint2DSubtract(double x, double y, double vec_x, double vec_y)
+{
+  EXPECT_POINT2D_EQ(
+    boost_geometry_util::point_2d::construct<T>(x, y) -
+      boost_geometry_util::vector_2d::construct(vec_x, vec_y),
+    x - vec_x, y - vec_y);
+}
+
 TEST(TestSuite, Point2D)
 {
   TEST_POINT_TYPE_FOREACH(testPoint2D, 1.0, 2.0);
   TEST_POINT_TYPE_FOREACH(testPoint2DApply, 1.0, 2.0, 3, 4);
+  TEST_POINT_TYPE_FOREACH(testPoint2DSubtract, 1.0, 2.0, 3, 4);
 }
 
 template <typename T>
@@ -65,7 +75,30 @@ void testPoint3D(double x, double y, double z)
   EXPECT_POINT3D_EQ(boost_geometry_util::point_3d::construct<T>(x, y, z), x, y, z);
 }
 
-TEST(TestSuite, Point3D) { TEST_POINT_TYPE_FOREACH(testPoint3D, 1.0, 2.0, 3.0); }
+template <typename T>
+void testPoint3DApply(double x, double y, double z, double vec_x, double vec_y, double vec_z)
+{
+  EXPECT_POINT3D_EQ(
+    boost_geometry_util::point_3d::construct<T>(x, y, z) +
+      boost_geometry_util::vector_3d::construct(vec_x, vec_y, vec_z),
+    x + vec_x, y + vec_y, z + vec_z);
+}
+
+template <typename T>
+void testPoint3DSubtract(double x, double y, double z, double vec_x, double vec_y, double vec_z)
+{
+  EXPECT_POINT3D_EQ(
+    boost_geometry_util::point_3d::construct<T>(x, y, z) -
+      boost_geometry_util::vector_3d::construct(vec_x, vec_y, vec_z),
+    x - vec_x, y - vec_y, z - vec_z);
+}
+
+TEST(TestSuite, Point3D)
+{
+  TEST_POINT_TYPE_FOREACH(testPoint3D, 1.0, 2.0, 3.0);
+  TEST_POINT_TYPE_FOREACH(testPoint3DApply, 1.0, 2.0, 3.0, 4, 5, 6);
+  TEST_POINT_TYPE_FOREACH(testPoint3DSubtract, 1.0, 2.0, 3.0, 4, 5, 6);
+}
 
 template <typename T>
 void testBox(double x_min, double y_min, double z_min, double x_max, double y_max, double z_max)
