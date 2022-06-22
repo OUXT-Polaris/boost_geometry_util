@@ -22,19 +22,21 @@
 
 namespace boost_geometry_util
 {
-class Point2D
+namespace point_3d
 {
-public:
-  explicit Point2D(const geometry_msgs::msg::Point & point);
-  explicit Point2D(double x, double y);
-  Point2D() = default;
-  double x;
-  double y;
-};
+template <typename T>
+T construct(double x, double y, double z)
+{
+  T point;
+  point.x = x;
+  point.y = y;
+  point.z = z;
+  return point;
+}
+}  // namespace point_3d
 }  // namespace boost_geometry_util
 
-BOOST_GEOMETRY_REGISTER_POINT_2D(boost_geometry_util::Point2D, double, cs::cartesian, x, y)
-BOOST_GEOMETRY_REGISTER_POINT_2D(geometry_msgs::msg::Point, double, cs::cartesian, x, y)
-BOOST_GEOMETRY_REGISTER_POINT_2D(geometry_msgs::msg::Point32, double, cs::cartesian, x, y)
+BOOST_GEOMETRY_REGISTER_POINT_3D(geometry_msgs::msg::Point, double, cs::cartesian, x, y, z);
+BOOST_GEOMETRY_REGISTER_POINT_3D(geometry_msgs::msg::Point32, double, cs::cartesian, x, y, z);
 
 #endif  // BOOST_GEOMETRY_UTIL__GEOMETRIES__POINT_HPP_

@@ -15,7 +15,6 @@
 #ifndef BOOST_GEOMETRY_UTIL__GEOMETRIES__GEOMETRIES_HPP_
 #define BOOST_GEOMETRY_UTIL__GEOMETRIES__GEOMETRIES_HPP_
 
-#include <boost_geometry_util/geometries/box.hpp>
 #include <boost_geometry_util/geometries/linestring.hpp>
 #include <boost_geometry_util/geometries/point.hpp>
 #include <boost_geometry_util/geometries/polygon.hpp>
