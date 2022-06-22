@@ -17,7 +17,21 @@
 
 #include <boost/geometry/geometries/register/linestring.hpp>
 #include <boost_geometry_util/geometries/point.hpp>
+#include <geometry_msgs/msg/vector3.hpp>
 #include <vector>
+
+namespace boost_geometry_util
+{
+namespace linestring
+{
+template <typename T>
+std::vector<T> construct(const T & origin, const geometry_msgs::msg::Vector3 & vec)
+{
+  std::vector<T> linestring;
+  linestring.emplace_back(origin);
+}
+}  // namespace linestring
+}  // namespace boost_geometry_util
 
 BOOST_GEOMETRY_REGISTER_LINESTRING(std::vector<geometry_msgs::msg::Point>)
 BOOST_GEOMETRY_REGISTER_LINESTRING(std::vector<geometry_msgs::msg::Point32>)

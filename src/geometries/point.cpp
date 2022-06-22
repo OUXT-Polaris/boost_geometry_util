@@ -16,4 +16,28 @@
 
 namespace boost_geometry_util
 {
+namespace vector_2d
+{
+geometry_msgs::msg::Vector3 construct(double x, double y)
+{
+  geometry_msgs::msg::Vector3 vec;
+  vec.x = x;
+  vec.y = y;
+  vec.z = 0;
+  return vec;
+}
+}  // namespace vector_2d
+
+namespace vector_3d
+{
+geometry_msgs::msg::Vector3 construct(double x, double y, double z)
+{
+  geometry_msgs::msg::Vector3 vec;
+  vec.x = x;
+  vec.y = y;
+  vec.z = z;
+  return vec;
+}
+
+}  // namespace vector_3d
 }  // namespace boost_geometry_util

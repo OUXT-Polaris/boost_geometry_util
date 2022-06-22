@@ -18,36 +18,7 @@
 #include <boost/geometry/geometries/polygon.hpp>
 #include <boost/geometry/geometries/register/multi_polygon.hpp>
 #include <boost_geometry_util/geometries/point.hpp>
-
-namespace boost_geometry_util
-{
-
-template <typename T>
-boost::geometry::model::polygon<T> toPolygon(const std::vector<T> & linestring)
-{
-  boost::geometry::model::polygon<T> poly;
-  std::for_each(linestring.begin(), linestring.end(), [&poly](const auto & point) {
-    boost::geometry::exterior_ring(poly).emplace_back(point);
-  });
-  return poly;
-}
-/*
-template <typename T>
-boost::geometry::model::polygon<boost_geometry_util::Point2D> toPolygon(
-  const std::vector<T> & linestring)
-{
-  boost::geometry::model::polygon<boost_geometry_util::Point2D> poly;
-  std::for_each(linestring.begin(), linestring.end(), [&poly](const auto & point) {
-    boost::geometry::exterior_ring(poly).emplace_back(
-      boost_geometry_util::Point2D(point.x, point.y));
-  });
-  return poly;
-}
-
-boost::geometry::model::polygon<boost_geometry_util::Point2D> toPolygon(
-  const geometry_msgs::msg::Polygon & polygon);
-*/
-}  // namespace boost_geometry_util
+#include <geometry_msgs/msg/vector3.hpp>
 
 // BOOST_GEOMETRY_REGISTER_MULTI_POLYGON(std::vector<geometry_msgs::msg::Point>)
 // BOOST_GEOMETRY_REGISTER_MULTI_POLYGON(std::vector<geometry_msgs::msg::Point32>)
