@@ -28,7 +28,7 @@ namespace bg = boost::geometry;
 #define EXPECT_POINT3D_EQ(POINT, X, Y, Z)              \
   EXPECT_DOUBLE_EQ(boost::geometry::get<0>(POINT), X); \
   EXPECT_DOUBLE_EQ(boost::geometry::get<1>(POINT), Y); \
-  EXPECT_DOUBLE_EQ(boost::geometry::get<1>(POINT), Z);
+  EXPECT_DOUBLE_EQ(boost::geometry::get<2>(POINT), Z);
 
 #define EXPECT_BOX2D_EQ(BOX, MIN_CORNER_X, MIN_CORNER_Y, MAX_CORNER_X, MAX_CORNER_Y) \
   EXPECT_POINT2D_EQ(BOX.min_corner, MIN_CORNER_X, MIN_CORNER_Y);                     \
@@ -39,12 +39,25 @@ namespace bg = boost::geometry;
   IDENTIFIER<geometry_msgs::msg::Point32>(__VA_ARGS__);
 
 template <typename T>
-void testPoint2D(double x, double y, double z)
+void testPoint2D(double x, double y)
 {
-  EXPECT_POINT2D_EQ(boost_geometry_util::point_3d::construct<T>(x, y, z), x, y);
+  EXPECT_POINT2D_EQ(boost_geometry_util::point_2d::construct<T>(x, y), x, y);
 }
 
-TEST(TestSuite, Point2D) { TEST_POINT_TYPE_FOREACH(testPoint2D, 1.0, 2.0, 3.0); }
+template <typename T>
+void testPoint2DApply(double x, double y, double vec_x, double vec_y)
+{
+  EXPECT_POINT2D_EQ(
+    boost_geometry_util::point_2d::construct<T>(x, y) +
+      boost_geometry_util::vector_2d::construct(vec_x, vec_y),
+    x + vec_x, y + vec_y);
+}
+
+TEST(TestSuite, Point2D)
+{
+  TEST_POINT_TYPE_FOREACH(testPoint2D, 1.0, 2.0);
+  TEST_POINT_TYPE_FOREACH(testPoint2DApply, 1.0, 2.0, 3, 4);
+}
 
 template <typename T>
 void testPoint3D(double x, double y, double z)
@@ -52,7 +65,7 @@ void testPoint3D(double x, double y, double z)
   EXPECT_POINT3D_EQ(boost_geometry_util::point_3d::construct<T>(x, y, z), x, y, z);
 }
 
-TEST(TestSuite, Point3D) { TEST_POINT_TYPE_FOREACH(testPoint2D, 1.0, 2.0, 3.0); }
+TEST(TestSuite, Point3D) { TEST_POINT_TYPE_FOREACH(testPoint3D, 1.0, 2.0, 3.0); }
 
 template <typename T>
 void testBox(double x_min, double y_min, double z_min, double x_max, double y_max, double z_max)
@@ -64,104 +77,19 @@ void testBox(double x_min, double y_min, double z_min, double x_max, double y_ma
 
 TEST(TestSuite, Box) { TEST_POINT_TYPE_FOREACH(testBox, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0); }
 
-TEST(TestSuite, Polygon)
+template <typename T>
+void testLineString(
+  double x_begin, double y_begin, double z_begin, double x_end, double y_end, double z_end)
 {
-  /*
-  boost_geometry_util::toPolygon(std::vector<boost_geometry_util::Point2D>(
-    {boost_geometry_util::Point2D(2.0, 1.3), boost_geometry_util::Point2D(2.4, 1.7),
-     boost_geometry_util::Point2D(3.6, 1.2), boost_geometry_util::Point2D(4.6, 1.6),
-     boost_geometry_util::Point2D(4.1, 3.0), boost_geometry_util::Point2D(5.3, 2.8),
-     boost_geometry_util::Point2D(5.4, 1.2), boost_geometry_util::Point2D(4.9, 0.8),
-     boost_geometry_util::Point2D(3.6, 0.7), boost_geometry_util::Point2D(2.0, 1.3)}));
-  */
+  const bg::model::linestring<T> line0 = {
+    boost_geometry_util::point_3d::construct<T>(x_begin, y_begin, z_begin),
+    boost_geometry_util::point_3d::construct<T>(x_end, y_end, z_end)};
+  EXPECT_NO_THROW(bg::correct(line0));
 }
+
+TEST(TestSuite, LineString) { TEST_POINT_TYPE_FOREACH(testLineString, 0, 2, 0, 2, 2, 0); }
+
 /*
-TEST(TestSuite, Box)
-{
-  const auto b0 = boost_geometry_util::Box2D(
-    boost_geometry_util::Point2D(0, 0), boost_geometry_util::Point2D(3, 3));
-  const auto b1 = boost_geometry_util::Box2D(
-    boost_geometry_util::Point2D(4, 4), boost_geometry_util::Point2D(7, 7));
-  EXPECT_BOX2D_EQ(b0, 0, 0, 3, 3);
-  EXPECT_BOX2D_EQ(b1, 4, 4, 7, 7);
-  geometry_msgs::msg::Point ros_point0;
-  {
-    ros_point0.x = 0.0;
-    ros_point0.y = 0.0;
-    ros_point0.z = 0.3;
-  };
-  geometry_msgs::msg::Point ros_point1;
-  {
-    ros_point1.x = 3.0;
-    ros_point1.y = 3.0;
-    ros_point1.z = 0.3;
-  };
-  const auto b2 = boost_geometry_util::Box2D(ros_point0, ros_point1);
-  EXPECT_BOX2D_EQ(b2, 0, 0, 3, 3);
-}
-
-TEST(TestSuite, LineString)
-{
-  std::vector<geometry_msgs::msg::Point> line0;
-  {
-    geometry_msgs::msg::Point p0, p1;
-    p0.x = 0;
-    p0.y = 2;
-    p1.x = 2;
-    p1.y = 2;
-    line0.emplace_back(p0);
-    line0.emplace_back(p1);
-  }
-  std::vector<geometry_msgs::msg::Point> line1;
-  {
-    geometry_msgs::msg::Point p0, p1;
-    p0.x = 1;
-    p0.y = 0;
-    p1.x = 1;
-    p1.y = 4;
-    line1.emplace_back(p0);
-    line1.emplace_back(p1);
-  }
-  EXPECT_TRUE(bg::intersects(line0, line1));
-  std::vector<geometry_msgs::msg::Point> line2;
-  {
-    geometry_msgs::msg::Point p0, p1;
-    p0.x = 0;
-    p0.y = 0;
-    p1.x = 2;
-    p1.y = 0;
-    line0.emplace_back(p0);
-    line0.emplace_back(p1);
-  }
-  std::vector<geometry_msgs::msg::Point> line3;
-  {
-    geometry_msgs::msg::Point p0, p1;
-    p0.x = 0;
-    p0.y = 2;
-    p1.x = 2;
-    p1.y = 2;
-    line1.emplace_back(p0);
-    line1.emplace_back(p1);
-  }
-  EXPECT_FALSE(bg::intersects(line2, line3));
-}
-
-TEST(TestSuite, Polygon)
-{
-  boost_geometry_util::toPolygon(std::vector<boost_geometry_util::Point2D>(
-    {boost_geometry_util::Point2D(2.0, 1.3), boost_geometry_util::Point2D(2.4, 1.7),
-     boost_geometry_util::Point2D(3.6, 1.2), boost_geometry_util::Point2D(4.6, 1.6),
-     boost_geometry_util::Point2D(4.1, 3.0), boost_geometry_util::Point2D(5.3, 2.8),
-     boost_geometry_util::Point2D(5.4, 1.2), boost_geometry_util::Point2D(4.9, 0.8),
-     boost_geometry_util::Point2D(3.6, 0.7), boost_geometry_util::Point2D(2.0, 1.3)}));
-  geometry_msgs::msg::Point p0, p1;
-  p0.x = 1;
-  p0.y = 0;
-  p1.x = 1;
-  p1.y = 4;
-  boost_geometry_util::toPolygon(std::vector<geometry_msgs::msg::Point>({p0, p1}));
-}
-
 TEST(TestSuite, Disjoint)
 {
   const auto b0 = boost_geometry_util::Box2D(
@@ -200,7 +128,6 @@ TEST(TestSuite, ConvexHull)
     boost_geometry_util::Point2D(4.1, 3.0), boost_geometry_util::Point2D(5.3, 2.8),
     boost_geometry_util::Point2D(5.4, 1.2), boost_geometry_util::Point2D(4.9, 0.8),
     boost_geometry_util::Point2D(3.6, 0.7), boost_geometry_util::Point2D(2.0, 1.3)};
-  /*
   bg::model::polygon<boost_geometry_util::Point2D> poly = boost_geometry_util::toPolygon();
   bg::model::polygon<boost_geometry_util::Point2D> hull;
   bg::convex_hull(poly, hull);
