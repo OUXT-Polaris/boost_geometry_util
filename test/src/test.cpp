@@ -38,36 +38,12 @@ namespace bg = boost::geometry;
   IDENTIFIER<geometry_msgs::msg::Point>(__VA_ARGS__); \
   IDENTIFIER<geometry_msgs::msg::Point32>(__VA_ARGS__);
 
-template <typename T>
 void testPoint2D(double x, double y)
 {
-  EXPECT_POINT2D_EQ(boost_geometry_util::point_2d::construct<T>(x, y), x, y);
+  EXPECT_POINT2D_EQ(boost_geometry_util::point_2d::construct(x, y), x, y);
 }
 
-template <typename T>
-void testPoint2DApply(double x, double y, double vec_x, double vec_y)
-{
-  EXPECT_POINT2D_EQ(
-    boost_geometry_util::point_2d::construct<T>(x, y) +
-      boost_geometry_util::vector_2d::construct(vec_x, vec_y),
-    x + vec_x, y + vec_y);
-}
-
-template <typename T>
-void testPoint2DSubtract(double x, double y, double vec_x, double vec_y)
-{
-  EXPECT_POINT2D_EQ(
-    boost_geometry_util::point_2d::construct<T>(x, y) -
-      boost_geometry_util::vector_2d::construct(vec_x, vec_y),
-    x - vec_x, y - vec_y);
-}
-
-TEST(TestSuite, Point2D)
-{
-  TEST_POINT_TYPE_FOREACH(testPoint2D, 1.0, 2.0);
-  TEST_POINT_TYPE_FOREACH(testPoint2DApply, 1.0, 2.0, 3, 4);
-  TEST_POINT_TYPE_FOREACH(testPoint2DSubtract, 1.0, 2.0, 3, 4);
-}
+TEST(TestSuite, Point2D) { testPoint2D(1, 2); }
 
 template <typename T>
 void testPoint3D(double x, double y, double z)
@@ -118,41 +94,62 @@ void testLineString(
     boost_geometry_util::point_3d::construct<T>(x_begin, y_begin, z_begin),
     boost_geometry_util::point_3d::construct<T>(x_end, y_end, z_end)};
   EXPECT_NO_THROW(bg::correct(line0));
+  std::vector<geometry_msgs::msg::Point2D> line_2d =
+    boost_geometry_util::linestring::construct(line0);
 }
 
 TEST(TestSuite, LineString) { TEST_POINT_TYPE_FOREACH(testLineString, 0, 2, 0, 2, 2, 0); }
 
-/*
+template <typename T>
+void testDisjoint(
+  double x0_min, double y0_min, double z0_min, double x0_max, double y0_max, double z0_max,
+  double x1_min, double y1_min, double z1_min, double x1_max, double y1_max, double z1_max,
+  bool disjoint)
+{
+  bg::model::box<T> box0(
+    boost_geometry_util::point_3d::construct<T>(x0_min, y0_min, z0_min),
+    boost_geometry_util::point_3d::construct<T>(x0_max, y0_max, z0_max));
+  bg::model::box<T> box1(
+    boost_geometry_util::point_3d::construct<T>(x1_min, y1_min, z1_min),
+    boost_geometry_util::point_3d::construct<T>(x1_max, y1_max, z1_max));
+  EXPECT_EQ(bg::disjoint(box0, box1), disjoint);
+}
+
+template <typename T>
+void testDisjoint(
+  double x_min, double y_min, double z_min, double x_max, double y_max, double z_max, /*    */
+  double x, double y, double z, bool disjoint)
+{
+  bg::model::box<T> box(
+    boost_geometry_util::point_3d::construct<T>(x_min, y_min, z_min),
+    boost_geometry_util::point_3d::construct<T>(x_max, y_max, z_max));
+  const auto p = boost_geometry_util::point_3d::construct<T>(x, y, z);
+  EXPECT_EQ(bg::disjoint(box, p), disjoint);
+}
+
 TEST(TestSuite, Disjoint)
 {
-  const auto b0 = boost_geometry_util::Box2D(
-    boost_geometry_util::Point2D(0, 0), boost_geometry_util::Point2D(3, 3));
-  const auto b1 = boost_geometry_util::Box2D(
-    boost_geometry_util::Point2D(4, 4), boost_geometry_util::Point2D(7, 7));
-  EXPECT_TRUE(bg::disjoint(b0, b1));
-  const auto b2 = boost_geometry_util::Box2D(
-    boost_geometry_util::Point2D(2, 2), boost_geometry_util::Point2D(5, 5));
-  EXPECT_FALSE(bg::disjoint(b0, b2));
-  const auto p0 = boost_geometry_util::Point2D(4, 4);
-  EXPECT_TRUE(bg::disjoint(b0, p0));
-  const auto p1 = boost_geometry_util::Point2D(2, 2);
-  EXPECT_FALSE(bg::disjoint(b0, p1));
-  geometry_msgs::msg::Point ros_point;
-  {
-    ros_point.x = 2.0;
-    ros_point.y = 2.0;
-    ros_point.z = 0.3;
-  };
-  EXPECT_FALSE(bg::disjoint(b0, ros_point));
+  TEST_POINT_TYPE_FOREACH(testDisjoint, 0, 0, 0, 3, 3, 0, 4, 4, 0, 7, 7, 0, true);
+  TEST_POINT_TYPE_FOREACH(testDisjoint, 0, 0, 0, 3, 3, 0, 2, 2, 0, 5, 5, 0, false);
+  TEST_POINT_TYPE_FOREACH(testDisjoint, 0, 0, 0, 3, 3, 0, 5, 5, 0, true);
+  TEST_POINT_TYPE_FOREACH(testDisjoint, 0, 0, 0, 3, 3, 0, 2, 2, 0, false);
+}
+
+void testArea(double x_min, double y_min, double x_max, double y_max)
+{
+  bg::model::box box(
+    boost_geometry_util::point_2d::construct(x_min, y_min),
+    boost_geometry_util::point_2d::construct(x_max, y_max));
+  EXPECT_DOUBLE_EQ(bg::area(box), std::abs(x_max - x_min) * std::abs(y_max - y_min));
 }
 
 TEST(TestSuite, Area)
 {
-  const auto b0 = boost_geometry_util::Box2D(
-    boost_geometry_util::Point2D(0, 0), boost_geometry_util::Point2D(3, 3));
-  EXPECT_DOUBLE_EQ(bg::area(b0), 9);
+  testArea(0, 0, 3, 3);
+  testArea(1, 1, 3, 3);
 }
 
+/*
 TEST(TestSuite, ConvexHull)
 {
   std::vector<boost_geometry_util::Point2D> linestring = {

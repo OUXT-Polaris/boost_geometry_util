@@ -30,9 +30,20 @@ std::vector<T> construct(const T & origin, const geometry_msgs::msg::Vector3 & v
   std::vector<T> linestring;
   linestring.emplace_back(origin);
 }
+
+template <typename T>
+std::vector<geometry_msgs::msg::Point2D> construct(const std::vector<T> & points)
+{
+  std::vector<geometry_msgs::msg::Point2D> result;
+  std::transform(points.begin(), points.end(), std::back_inserter(result), [](const T & p) {
+    return geometry_msgs::msg::Point2D(p.x, p.y);
+  });
+  return result;
+}
 }  // namespace linestring
 }  // namespace boost_geometry_util
 
+BOOST_GEOMETRY_REGISTER_LINESTRING(std::vector<geometry_msgs::msg::Point2D>)
 BOOST_GEOMETRY_REGISTER_LINESTRING(std::vector<geometry_msgs::msg::Point>)
 BOOST_GEOMETRY_REGISTER_LINESTRING(std::vector<geometry_msgs::msg::Point32>)
 
