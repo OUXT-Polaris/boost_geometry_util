@@ -122,30 +122,42 @@ void testLineString(
 
 TEST(TestSuite, LineString) { TEST_POINT_TYPE_FOREACH(testLineString, 0, 2, 0, 2, 2, 0); }
 
-/*
-TEST(TestSuite, Disjoint)
+template <typename T>
+void testDisjoint(
+  double x0_min, double y0_min, double z0_min, double x0_max, double y0_max, double z0_max,
+  double x1_min, double y1_min, double z1_min, double x1_max, double y1_max, double z1_max,
+  bool disjoint)
 {
-  const auto b0 = boost_geometry_util::Box2D(
-    boost_geometry_util::Point2D(0, 0), boost_geometry_util::Point2D(3, 3));
-  const auto b1 = boost_geometry_util::Box2D(
-    boost_geometry_util::Point2D(4, 4), boost_geometry_util::Point2D(7, 7));
-  EXPECT_TRUE(bg::disjoint(b0, b1));
-  const auto b2 = boost_geometry_util::Box2D(
-    boost_geometry_util::Point2D(2, 2), boost_geometry_util::Point2D(5, 5));
-  EXPECT_FALSE(bg::disjoint(b0, b2));
-  const auto p0 = boost_geometry_util::Point2D(4, 4);
-  EXPECT_TRUE(bg::disjoint(b0, p0));
-  const auto p1 = boost_geometry_util::Point2D(2, 2);
-  EXPECT_FALSE(bg::disjoint(b0, p1));
-  geometry_msgs::msg::Point ros_point;
-  {
-    ros_point.x = 2.0;
-    ros_point.y = 2.0;
-    ros_point.z = 0.3;
-  };
-  EXPECT_FALSE(bg::disjoint(b0, ros_point));
+  bg::model::box<T> box0(
+    boost_geometry_util::point_3d::construct<T>(x0_min, y0_min, z0_min),
+    boost_geometry_util::point_3d::construct<T>(x0_max, y0_max, z0_max));
+  bg::model::box<T> box1(
+    boost_geometry_util::point_3d::construct<T>(x1_min, y1_min, z1_min),
+    boost_geometry_util::point_3d::construct<T>(x1_max, y1_max, z1_max));
+  EXPECT_EQ(bg::disjoint(box0, box1), disjoint);
 }
 
+template <typename T>
+void testDisjoint(
+  double x_min, double y_min, double z_min, double x_max, double y_max, double z_max, /*    */
+  double x, double y, double z, bool disjoint)
+{
+  bg::model::box<T> box(
+    boost_geometry_util::point_3d::construct<T>(x_min, y_min, z_min),
+    boost_geometry_util::point_3d::construct<T>(x_max, y_max, z_max));
+  const auto p = boost_geometry_util::point_3d::construct<T>(x, y, z);
+  EXPECT_EQ(bg::disjoint(box, p), disjoint);
+}
+
+TEST(TestSuite, Disjoint)
+{
+  TEST_POINT_TYPE_FOREACH(testDisjoint, 0, 0, 0, 3, 3, 0, 4, 4, 0, 7, 7, 0, true);
+  TEST_POINT_TYPE_FOREACH(testDisjoint, 0, 0, 0, 3, 3, 0, 2, 2, 0, 5, 5, 0, false);
+  TEST_POINT_TYPE_FOREACH(testDisjoint, 0, 0, 0, 3, 3, 0, 5, 5, 0, true);
+  TEST_POINT_TYPE_FOREACH(testDisjoint, 0, 0, 0, 3, 3, 0, 2, 2, 0, false);
+}
+
+/*
 TEST(TestSuite, Area)
 {
   const auto b0 = boost_geometry_util::Box2D(
