@@ -16,6 +16,13 @@
 
 namespace boost_geometry_util
 {
+namespace point_2d
+{
+boost::geometry::model::d2::point_xy<double> construct(double x, double y)
+{
+  return boost::geometry::model::d2::point_xy<double>(x, y);
+}
+}  // namespace point_2d
 namespace vector_2d
 {
 geometry_msgs::msg::Vector3 construct(double x, double y)

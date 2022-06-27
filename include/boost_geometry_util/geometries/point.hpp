@@ -25,14 +25,11 @@ namespace boost_geometry_util
 {
 namespace point_2d
 {
+boost::geometry::model::d2::point_xy<double> construct(double x, double y);
 template <typename T>
-T construct(double x, double y)
+boost::geometry::model::d2::point_xy<double> construct(const T point)
 {
-  T point;
-  point.x = x;
-  point.y = y;
-  point.z = 0;
-  return point;
+  return construct(static_cast<double>(point.x), static_cast<double>(point.y));
 }
 }  // namespace point_2d
 

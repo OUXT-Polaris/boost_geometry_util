@@ -38,36 +38,12 @@ namespace bg = boost::geometry;
   IDENTIFIER<geometry_msgs::msg::Point>(__VA_ARGS__); \
   IDENTIFIER<geometry_msgs::msg::Point32>(__VA_ARGS__);
 
-template <typename T>
 void testPoint2D(double x, double y)
 {
-  EXPECT_POINT2D_EQ(boost_geometry_util::point_2d::construct<T>(x, y), x, y);
+  EXPECT_POINT2D_EQ(boost_geometry_util::point_2d::construct(x, y), x, y);
 }
 
-template <typename T>
-void testPoint2DApply(double x, double y, double vec_x, double vec_y)
-{
-  EXPECT_POINT2D_EQ(
-    boost_geometry_util::point_2d::construct<T>(x, y) +
-      boost_geometry_util::vector_2d::construct(vec_x, vec_y),
-    x + vec_x, y + vec_y);
-}
-
-template <typename T>
-void testPoint2DSubtract(double x, double y, double vec_x, double vec_y)
-{
-  EXPECT_POINT2D_EQ(
-    boost_geometry_util::point_2d::construct<T>(x, y) -
-      boost_geometry_util::vector_2d::construct(vec_x, vec_y),
-    x - vec_x, y - vec_y);
-}
-
-TEST(TestSuite, Point2D)
-{
-  TEST_POINT_TYPE_FOREACH(testPoint2D, 1.0, 2.0);
-  TEST_POINT_TYPE_FOREACH(testPoint2DApply, 1.0, 2.0, 3, 4);
-  TEST_POINT_TYPE_FOREACH(testPoint2DSubtract, 1.0, 2.0, 3, 4);
-}
+TEST(TestSuite, Point2D) { testPoint2D(1, 2); }
 
 template <typename T>
 void testPoint3D(double x, double y, double z)
@@ -157,27 +133,19 @@ TEST(TestSuite, Disjoint)
   TEST_POINT_TYPE_FOREACH(testDisjoint, 0, 0, 0, 3, 3, 0, 2, 2, 0, false);
 }
 
-/*
-TEST(TestSuite, Area)
+void testArea(double x_min, double y_min, double x_max, double y_max)
 {
-  const auto b0 = boost_geometry_util::Box2D(
-    boost_geometry_util::Point2D(0, 0), boost_geometry_util::Point2D(3, 3));
-  EXPECT_DOUBLE_EQ(bg::area(b0), 9);
+  bg::model::box box(
+    boost_geometry_util::point_2d::construct(x_min, y_min),
+    boost_geometry_util::point_2d::construct(x_max, y_max));
+  EXPECT_DOUBLE_EQ(bg::area(box), std::abs(x_max - x_min) * std::abs(y_max - y_min));
 }
 
-TEST(TestSuite, ConvexHull)
+TEST(TestSuite, Area)
 {
-  std::vector<boost_geometry_util::Point2D> linestring = {
-    boost_geometry_util::Point2D(2.0, 1.3), boost_geometry_util::Point2D(2.4, 1.7),
-    boost_geometry_util::Point2D(3.6, 1.2), boost_geometry_util::Point2D(4.6, 1.6),
-    boost_geometry_util::Point2D(4.1, 3.0), boost_geometry_util::Point2D(5.3, 2.8),
-    boost_geometry_util::Point2D(5.4, 1.2), boost_geometry_util::Point2D(4.9, 0.8),
-    boost_geometry_util::Point2D(3.6, 0.7), boost_geometry_util::Point2D(2.0, 1.3)};
-  bg::model::polygon<boost_geometry_util::Point2D> poly = boost_geometry_util::toPolygon();
-  bg::model::polygon<boost_geometry_util::Point2D> hull;
-  bg::convex_hull(poly, hull);
+  testArea(0, 0, 3, 3);
+  testArea(1, 1, 3, 3);
 }
-*/
 
 int main(int argc, char ** argv)
 {
