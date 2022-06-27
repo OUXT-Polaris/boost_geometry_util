@@ -94,6 +94,8 @@ void testLineString(
     boost_geometry_util::point_3d::construct<T>(x_begin, y_begin, z_begin),
     boost_geometry_util::point_3d::construct<T>(x_end, y_end, z_end)};
   EXPECT_NO_THROW(bg::correct(line0));
+  std::vector<geometry_msgs::msg::Point2D> line_2d =
+    boost_geometry_util::linestring::construct(line0);
 }
 
 TEST(TestSuite, LineString) { TEST_POINT_TYPE_FOREACH(testLineString, 0, 2, 0, 2, 2, 0); }
@@ -146,6 +148,21 @@ TEST(TestSuite, Area)
   testArea(0, 0, 3, 3);
   testArea(1, 1, 3, 3);
 }
+
+/*
+TEST(TestSuite, ConvexHull)
+{
+  std::vector<boost_geometry_util::Point2D> linestring = {
+    boost_geometry_util::Point2D(2.0, 1.3), boost_geometry_util::Point2D(2.4, 1.7),
+    boost_geometry_util::Point2D(3.6, 1.2), boost_geometry_util::Point2D(4.6, 1.6),
+    boost_geometry_util::Point2D(4.1, 3.0), boost_geometry_util::Point2D(5.3, 2.8),
+    boost_geometry_util::Point2D(5.4, 1.2), boost_geometry_util::Point2D(4.9, 0.8),
+    boost_geometry_util::Point2D(3.6, 0.7), boost_geometry_util::Point2D(2.0, 1.3)};
+  bg::model::polygon<boost_geometry_util::Point2D> poly = boost_geometry_util::toPolygon();
+  bg::model::polygon<boost_geometry_util::Point2D> hull;
+  bg::convex_hull(poly, hull);
+}
+*/
 
 int main(int argc, char ** argv)
 {

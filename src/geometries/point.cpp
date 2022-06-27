@@ -14,13 +14,21 @@
 
 #include <boost_geometry_util/geometries/point.hpp>
 
+namespace geometry_msgs
+{
+namespace msg
+{
+Point2D::Point2D(double x, double y) : x(x), y(y) {}
+}  // namespace msg
+}  // namespace geometry_msgs
+
 namespace boost_geometry_util
 {
 namespace point_2d
 {
-boost::geometry::model::d2::point_xy<double> construct(double x, double y)
+geometry_msgs::msg::Point2D construct(double x, double y)
 {
-  return boost::geometry::model::d2::point_xy<double>(x, y);
+  return geometry_msgs::msg::Point2D(x, y);
 }
 }  // namespace point_2d
 namespace vector_2d
