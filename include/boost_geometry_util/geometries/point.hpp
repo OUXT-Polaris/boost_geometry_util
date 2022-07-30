@@ -21,18 +21,30 @@
 #include <geometry_msgs/msg/point32.hpp>
 #include <geometry_msgs/msg/vector3.hpp>
 
+namespace geometry_msgs
+{
+namespace msg
+{
+struct Point2D
+{
+  double x;
+  double y;
+  Point2D(double x, double y);
+  Point2D() = default;
+};
+
+}  // namespace msg
+}  // namespace geometry_msgs
+
 namespace boost_geometry_util
 {
 namespace point_2d
 {
+geometry_msgs::msg::Point2D construct(double x, double y);
 template <typename T>
-T construct(double x, double y)
+geometry_msgs::msg::Point2D construct(const T point)
 {
-  T point;
-  point.x = x;
-  point.y = y;
-  point.z = 0;
-  return point;
+  return construct(static_cast<double>(point.x), static_cast<double>(point.y));
 }
 }  // namespace point_2d
 
@@ -74,7 +86,8 @@ geometry_msgs::msg::Point operator-(const T1 & v1, const T2 & v2)
     v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
 }
 
-BOOST_GEOMETRY_REGISTER_POINT_3D(geometry_msgs::msg::Point, double, cs::cartesian, x, y, z);
-BOOST_GEOMETRY_REGISTER_POINT_3D(geometry_msgs::msg::Point32, double, cs::cartesian, x, y, z);
+BOOST_GEOMETRY_REGISTER_POINT_2D(geometry_msgs::msg::Point2D, double, cs::cartesian, x, y)
+BOOST_GEOMETRY_REGISTER_POINT_3D(geometry_msgs::msg::Point, double, cs::cartesian, x, y, z)
+BOOST_GEOMETRY_REGISTER_POINT_3D(geometry_msgs::msg::Point32, double, cs::cartesian, x, y, z)
 
 #endif  // BOOST_GEOMETRY_UTIL__GEOMETRIES__POINT_HPP_

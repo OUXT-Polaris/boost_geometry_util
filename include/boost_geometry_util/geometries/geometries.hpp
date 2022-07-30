@@ -17,6 +17,5 @@
 
 #include <boost_geometry_util/geometries/linestring.hpp>
 #include <boost_geometry_util/geometries/point.hpp>
-#include <boost_geometry_util/geometries/polygon.hpp>
 
 #endif  // BOOST_GEOMETRY_UTIL__GEOMETRIES__GEOMETRIES_HPP_
